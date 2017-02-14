@@ -22,7 +22,7 @@ gcc0:
 	$(GCC) -o $(PRG) $(CYGWIN) $(DRIVER0) $(OBJECTS0) $(GCCFLAGS)
 msc0:
 	$(MSC) /Fe$@.exe           $(DRIVER0) $(OBJECTS0) $(MSCFLAGS)
-1 2 3 4 5 6 8 9 10 11 12:
+0 1 2 3 4 5 6 8 9 10 11 12:
 	@echo "running test$@"
 	@echo "should run in less than 200 ms"
 	./$(PRG) $@ >studentout$@
