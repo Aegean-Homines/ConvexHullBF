@@ -1,16 +1,44 @@
+/*!
+* \file hull-bruteforce.cpp
+* \author Egemen Koku
+* \date 14 Feb 2017
+* \brief Implementation of @b hull-bruteforce.h
+*
+* \copyright Digipen Institute of Technology
+* \mainpage Hull Bruteforce Implementation
+*
+*/
+
 #include "hull-bruteforce.h"
 #include <limits>
 #include <iostream>
 
+/**
+* @brief == operator for the Point class
+* @param arg2 Point to be checked with
+* @returns true if this and arg2 is equal, false otherwise
+*/
 bool Point::operator==( Point const& arg2 ) const {
     return ( (x==arg2.x) && (y==arg2.y) );
 }
 
+/**
+* @brief << operator overloading for printing the point
+* @param os the output stream to be used
+* @param p the point to be printed
+* @returns output stream
+*/
 std::ostream& operator<< (std::ostream& os, Point const& p) {
 	os << "(" << p.x << " , " << p.y << ") ";
 	return os;
 }
 
+/**
+* @brief >> operator overloading for filling the point fields
+* @param os the input stream to be used
+* @param p the point to be written on
+* @returns input stream
+*/
 std::istream& operator>> (std::istream& os, Point & p) {
 	os >> p.x >> p.y;
 	return os;
@@ -20,6 +48,16 @@ std::istream& operator>> (std::istream& os, Point & p) {
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 //return value is (on left, on right)
+/**
+* @brief helper function for finding where a point lies with respect to a line
+* @param p1x x coordinate of the first point
+* @param p2x x coordinate of the second point
+* @param qx x coordinate of the point to be checked
+* @param p1y y coordinate of the first point
+* @param p2y y coordinate of the second point
+* @param qy y coordinate of the point to be checked
+* @returns pair of isOnLeft - isOnRight
+*/
 std::pair<bool,bool> get_location(
 		float const& p1x, //check which side of the line (p1x,p1y)-->(p2x,p2y) 
 		float const& p1y, //point (qx,qy) is on
@@ -39,6 +77,13 @@ std::pair<bool,bool> get_location(
 
 // Well apparently the function above also does this but in a cooler way
 // If this gives me bad performance, just switch to the one above
+/**
+* @brief helper function for checking whether all points lie on one side or not
+* @param point1Index index of the first point
+* @param point2Index index of the second point
+* @param points vector of points
+* @returns true if all the points are on one side, false otherwise
+*/
 bool checkPoints(unsigned int point1Index, unsigned int point2Index, std::vector< Point > const& points) {
 	bool isOnNegativeSide = false;
 	bool isOnPositiveSide = false;
@@ -66,7 +111,11 @@ bool checkPoints(unsigned int point1Index, unsigned int point2Index, std::vector
 	return true;
 }
 
-//returns a set of indices of points that form convex hull
+/**
+* @brief First brute force hull function
+* @param points all points on the plane
+* @returns a set of indices of points that form convex hull
+*/
 std::set<int> hullBruteForce ( std::vector< Point > const& points ) {
 	int num_points = points.size();
 	if ( num_points < 3 ) throw "bad number of points";
@@ -84,6 +133,11 @@ std::set<int> hullBruteForce ( std::vector< Point > const& points ) {
 	return hull_indices;
 }
 
+/**
+* @brief Recursive function for the second convex hull bruteforce function
+* @param hullIndices indices of the hull for the current iteration
+* @param points all points on the plane
+*/
 void findHullVertexRec(std::vector<int> & hullIndices, std::vector< Point > const& points) {
 	int lastVertex = hullIndices.back();
 
@@ -124,6 +178,11 @@ void findHullVertexRec(std::vector<int> & hullIndices, std::vector< Point > cons
 	return findHullVertexRec(hullIndices, points);
 }
 
+/**
+* @brief Second brute force hull function
+* @param points all points on the plane
+* @returns a vector of indices of points that form convex hull
+*/
 std::vector<int> hullBruteForce2 ( std::vector< Point > const& points ) {
 	int num_points = points.size();
 	if ( num_points < 3 ) throw "bad number of points";
